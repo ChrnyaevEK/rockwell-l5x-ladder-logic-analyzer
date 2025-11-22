@@ -25,7 +25,7 @@ argument    : tag_reference
 // Expression is defined for instructions like CPT (Compute)
 expression  : expression "+" expression       -> addition
             | expression "-" expression       -> subtraction
-            | expression "*" expression       -> multiplication
+            | expression "*"? expression      -> multiplication
             | expression "/" expression       -> division
             | expression "**" expression      -> exponential
             | expression ">" expression       -> greater
@@ -34,6 +34,7 @@ expression  : expression "+" expression       -> addition
             | expression "<=" expression      -> less_or_equal
             | expression "=" expression       -> assignment // Use for Assignment inside CPT
             | "(" expression ")"              -> parentheses
+            | instruction
             | tag_reference
             | VALUE
 
@@ -42,15 +43,16 @@ expression  : expression "+" expression       -> addition
 tag_reference   : TAG_NAME access_chain*
 
 // 2. Access Chains: Defines how a tag can be accessed recursively
+?index     : tag_reference | INT | expression
 access_chain    : "." (TAG_NAME | INT)            -> dot_member_access   // .MemberName (e.g., Timer.PRE)
                 | ":" (TAG_NAME | INT)            -> colon_module_access // :ModuleName (e.g., Local:3:I)
-                | "[" (tag_reference | INT | expression) "]"   -> index_access        // [IndexTag] or [10]
+                | "[" index (","? index?)+ "]"    -> index_access        // [IndexTag] or [10]
 
 // TOKENIZED TAG NAME: Used for the base name and all member/module names.
-TAG_NAME    : CNAME
+TAG_NAME.0    : CNAME
 
 // OPCODE CNAME is now explicit.
-OPCODE      : CNAME
+OPCODE.1      : CNAME
 
 // Standard String token
 STRING      : /'[^']*'/

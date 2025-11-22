@@ -5,8 +5,9 @@ lxml
 # Framework to parse L5X ladder logic
 lark
 
-# Jupyter notebook
+# Jupyter notebook, FE
 ipykernel
+streamlit==1.51.0
 
 # Data mining
 treelib
