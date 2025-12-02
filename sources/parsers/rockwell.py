@@ -1,6 +1,6 @@
 from lark import Lark
 
-ROCKWELL_L5X_GRAMMAR = r"""
+L5X_GRAMMAR = r"""
 
 // --- Start Symbol ---
 start : routine
@@ -75,4 +75,4 @@ UNDEFINED   : "?"
 %ignore WS
 """
 
-rockwell_l5x_parser = Lark(ROCKWELL_L5X_GRAMMAR, start="routine")
+l5x_parser = Lark(L5X_GRAMMAR, start="routine")
